@@ -23,9 +23,9 @@ void raytrace(byte* imgBuffer, int imgHeight, int imgWidth, Scene* scene);
 int main()
 {
     // Parameters
-    const int imgHeight = 2048;
-    const int imgWidth = 2048;
-    /*Sphere whiteSphere(Vec3(0.45f, -0.0f, -0.15f), 0.15f, 0.8f, 0.1f, 0.3f,
+    const int imgHeight = 256;
+    const int imgWidth = 256;
+    Sphere whiteSphere(Vec3(0.45f, -0.0f, -0.15f), 0.15f, 0.8f, 0.1f, 0.3f,
         Color(1.0f, 1.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 4.0f);
     Sphere redSphere(Vec3(0.0f, 0.0f, -0.1f), 0.2f, 0.6f, 0.3f, 0.1f,
         Color(1.0f, 0.0f, 0.0), Color(1.0f, 1.0f, 1.0f), 32.0f);
@@ -34,10 +34,10 @@ int main()
     Sphere blueSphere(Vec3(0.0f, -10000.5, 0.0f), 10000.0f, 0.9f, 0.0f, 0.1f,
         Color(0.0f, 0.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 16.0);
 
-    Sphere purpleSphere(Vec3(0.0f, 0.0f, 0.0f), 0.4f, 0.7f, 0.2f, 0.1f,
+    /*Sphere purpleSphere(Vec3(0.0f, 0.0f, 0.0f), 0.4f, 0.7f, 0.2f, 0.1f,
         Color(1.0f, 0.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 16.0f);*/
 
-    Sphere bottom(Vec3(0.0f, -0.5f, 0.0f), 0.5f, 0.7f, 0.2f, 0.1f,
+    /*Sphere bottom(Vec3(0.0f, -0.5f, 0.0f), 0.5f, 0.7f, 0.2f, 0.1f,
         Color(1.0f, 1.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 64.0f);
     Sphere middle(Vec3(0.0f, -0.0f, 0.0f), 0.4f, 0.7f, 0.2f, 0.1f,
         Color(1.0f, 1.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 64.0f);
@@ -52,16 +52,16 @@ int main()
     Sphere buttonLower(Vec3(0.0f, -0.1f, 0.4f), 0.03f, 0.5f, 0.4f, 0.1f,
         Color(0.05f, 0.05f, 0.05f), Color(1.0f, 1.0f, 1.0f), 128.0f);
     Sphere nose(Vec3(0.0f, 0.35f, 0.3f), 0.03f, 0.7f, 0.2f, 0.1f,
-        Color(1.0f, 0.5f, 0.0f), Color(1.0f, 1.0f, 1.0f), 16.0f);
+        Color(1.0f, 0.5f, 0.0f), Color(1.0f, 1.0f, 1.0f), 16.0f);*/
 
-    Sphere spheres[] = { bottom, middle, top, eyeLeft, eyeRight, buttonUpper, buttonLower, nose };
+    Sphere spheres[] = { whiteSphere, redSphere, greenSphere, blueSphere };
     int numSpheres = sizeof(spheres) / sizeof(Sphere);
     /*Scene scene(spheres, numSpheres, Vec3(0.0f, 0.0f, 1.0f), Vec3(0.0f, 1.0f, 0.0f),
         Color(1.0f, 1.0f, 1.0f), Color(0.0f, 0.0f, 0.0f), Color(0.2f, 0.2f, 0.2f));*/
-    /*Scene scene(spheres, numSpheres, Vec3(0.0f, 0.0f, 1.0f), Vec3(1.0f, 1.0f, 1.0f),
-        Color(1.0f, 1.0f, 1.0f), Color(0.1f, 0.1f, 0.1f), Color(0.2f, 0.2f, 0.2f));*/
-    Scene scene(spheres, numSpheres, Vec3(0.0f, 0.0f, 1.0f), Vec3(1.0f, 3.0f, 1.0f),
-            Color(1.0f, 1.0f, 1.0f), Color(0.7f, 0.7f, 0.9f), Color(0.5f, 0.5f, 0.8f));
+    Scene scene(spheres, numSpheres, Vec3(0.0f, 0.0f, 1.0f), Vec3(1.0f, 1.0f, 1.0f),
+        Color(1.0f, 1.0f, 1.0f), Color(0.1f, 0.1f, 0.1f), Color(0.2f, 0.2f, 0.2f));
+    /*Scene scene(spheres, numSpheres, Vec3(0.0f, 0.0f, 1.0f), Vec3(1.0f, 3.0f, 1.0f),
+            Color(1.0f, 1.0f, 1.0f), Color(0.7f, 0.7f, 0.9f), Color(0.5f, 0.5f, 0.8f));*/
 
     byte* imgBuffer = new byte[imgHeight * imgWidth * 3];
 
