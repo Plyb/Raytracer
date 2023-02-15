@@ -1,5 +1,7 @@
 #pragma once
 #include "Vec3.cuh"
+#include "RayHit.cuh"
+#include "RayHit.cuh"
 class Ray {
 public:
 	Vec3 origin;
@@ -7,54 +9,55 @@ public:
 	__device__ Ray(Vec3 origin, Vec3 dir) : origin(origin), dir(dir) {}
 
 	__device__ Color getColor(const Scene* scene) {
-        Vec3 closestIntersection = Vec3(0.0f, 0.0f, 0.0f);
-        Sphere closestSphere = Sphere();
-        float closestDistance = -1.0f;
-        for (int i = 0; i < scene->numSpheres; i++) {
-            Vec3* intersection = new Vec3(0.0f, 0.0f, 0.0f);
-            Sphere sphere = scene->spheres[i];
-            if (intersectsSphere(sphere.center, sphere.radius, intersection)) {
-                float distance = origin.distance(*intersection);
-                if (closestDistance == -1.0f || distance < closestDistance) {
-                    closestIntersection = *intersection;
-                    closestDistance = distance;
-                    closestSphere = sphere;
-                }
-            }
-            free(intersection);
-        }
-        bool intersected = closestDistance != -1.0f;
-        if (!intersected) {
+        RayHit hit = getFirstIntersection(scene);
+        if (!hit.hasIntersection()) {
             return scene->bgColor;
         }
 
-        return phong(&closestSphere, scene, closestIntersection);
+        return phong(hit.sphere, scene, hit.point);
 	}
 
 private:
+    __device__ RayHit getFirstIntersection(const Scene* scene) {
+        RayHit closestHit = RayHit();
+        for (int i = 0; i < scene->numSpheres; i++) {
+            const Sphere* sphere = &scene->spheres[i];
+            RayHit hit = intersectsSphere(sphere);
+            if (hit.hasIntersection()) {
+                if (hit.distance < closestHit.distance) {
+                    closestHit = hit;
+                }
+            }
+        }
+        return closestHit;
+    }
+
     __device__
-    bool intersectsSphere(const Vec3 center, float r, Vec3* res) {
-        float b = 2 * (dir.x * (origin.x - center.x) + dir.y * (origin.y - center.y) + dir.z * (origin.z - center.z));
-        float c = origin.x * origin.x - 2 * origin.x * center.x + center.x * center.x +
-            origin.y * origin.y - 2 * origin.y * center.y + center.y * center.y +
-            origin.z * origin.z - 2 * origin.z * center.z + center.z * center.z - r * r;
+    RayHit intersectsSphere(const Sphere* sphere) {
+        float b = 2 * (dir.x * (origin.x - sphere->center.x) +
+            dir.y * (origin.y - sphere->center.y) +
+            dir.z * (origin.z - sphere->center.z));
+        float c = origin.x * origin.x - 2 * origin.x * sphere->center.x + sphere->center.x * sphere->center.x +
+            origin.y * origin.y - 2 * origin.y * sphere->center.y + sphere->center.y * sphere->center.y +
+            origin.z * origin.z - 2 * origin.z * sphere->center.z + sphere->center.z * sphere->center.z -
+            sphere->radius * sphere->radius;
         float d = b * b - 4 * c;
 
         if (d >= 0) {
             float t0 = (-b - sqrtf(d)) / 2;
             if (t0 > 0) {
-                res->set(tToVec3(t0));
-                return true;
+                Vec3 point = tToVec3(t0);
+                return RayHit(sphere, point, origin.distance(point));
             }
             else {
                 float t1 = (-b + sqrtf(d)) / 2;
                 if (t1 > 0) {
-                    res->set(tToVec3(t1));
-                    return true;
+                    Vec3 point = tToVec3(t1);
+                    return RayHit(sphere, point, origin.distance(point));
                 }
             }
         }
-        return false;
+        return RayHit();
     }
 
     __device__

@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.cuh" />
+    <ClInclude Include="RayHit.cuh" />
     <ClInclude Include="PpmWriter.h" />
     <ClInclude Include="Ray.cuh" />
     <ClInclude Include="Scene.cuh" />
