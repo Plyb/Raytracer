@@ -8,20 +8,28 @@ public:
 	Vec3 dir;
 	__device__ Ray(Vec3 origin, Vec3 dir) : origin(origin), dir(dir) {}
 
-	__device__ Color getColor(const Scene* scene) {
-        RayHit hit = getFirstIntersection(scene);
+	__device__ Color getColor(const Scene* scene, const Sphere* excludeSphere) {
+        RayHit hit = getFirstIntersection(scene, excludeSphere);
         if (!hit.hasIntersection()) {
             return scene->bgColor;
         }
 
-        return phong(hit.sphere, scene, hit.point);
+        bool inShadow = Ray(hit.point, scene->lightDirection)
+            .getFirstIntersection(scene, hit.sphere)
+            .hasIntersection();
+
+        return phong(hit.sphere, scene, hit.point, inShadow);
 	}
 
 private:
-    __device__ RayHit getFirstIntersection(const Scene* scene) {
+    __device__ RayHit getFirstIntersection(const Scene* scene, const Sphere* excludeSphere) {
         RayHit closestHit = RayHit();
         for (int i = 0; i < scene->numSpheres; i++) {
             const Sphere* sphere = &scene->spheres[i];
+            if (sphere == excludeSphere) {
+                break;
+            }
+
             RayHit hit = intersectsSphere(sphere);
             if (hit.hasIntersection()) {
                 if (hit.distance < closestHit.distance) {
@@ -61,7 +69,12 @@ private:
     }
 
     __device__
-    Color phong(const Sphere* sphere, const Scene* scene, const Vec3 intersection) {
+    Color phong(const Sphere* sphere, const Scene* scene, const Vec3 intersection, bool inShadow) {
+        Color Ia = scene->ambientLightColor * sphere->ka;
+        if (inShadow) {
+            return Ia;
+        }
+
         Vec3 v = (origin - intersection).normalize();
         Vec3 normal = sphereNormal(intersection, sphere);
         float ldn = scene->lightDirection.dot(normal);
@@ -72,7 +85,6 @@ private:
             ? scene->lightColor * sphere->specularColor * sphere->ks *
             powf((normal * 2 * ldn - scene->lightDirection).dot(v), sphere->kGls)
             : Color(0.0f, 0.0f, 0.0f);
-        Color Ia = scene->ambientLightColor * sphere->ka;
         return Ia + Id + Is;
     }
     

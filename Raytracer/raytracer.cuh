@@ -23,7 +23,7 @@ void tracePixel(byte* imgBuffer, int imgHeight, int imgWidth, const Scene* scene
     float sx = pixelX / float(imgHeight >> 1) - 1.0f;
     Ray primaryRay = Ray(Vec3(scene->camPos), (Vec3(sx, sy, 0.0f) - scene->camPos).normalize());
 
-    Color color = primaryRay.getColor(scene);
+    Color color = primaryRay.getColor(scene, NULL);
 
     imgBuffer[i + 0] = color.byteR();
     imgBuffer[i + 1] = color.byteG();
