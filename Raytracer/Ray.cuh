@@ -17,7 +17,7 @@ public:
         bool inShadow = Ray(hit.point, scene->lightDirection)
             .hasIntersection(scene, hit.sphere);
 
-        return phong(hit.sphere, scene, hit.point, inShadow);
+        return phong(scene, &hit, inShadow);
 	}
 
 private:
@@ -83,21 +83,21 @@ private:
     }
 
     __device__
-    Color phong(const Sphere* sphere, const Scene* scene, const Vec3 intersection, bool inShadow) {
-        Color Ia = scene->ambientLightColor * sphere->ka;
+    Color phong(const Scene* scene, const RayHit* hit, bool inShadow) {
+        Color Ia = scene->ambientLightColor * hit->sphere->ka;
         if (inShadow) {
             return Ia;
         }
 
-        Vec3 v = (origin - intersection).normalize();
-        Vec3 normal = sphereNormal(intersection, sphere);
+        Vec3 v = (origin - hit->point).normalize();
+        Vec3 normal = sphereNormal(hit->point, hit->sphere);
         float ldn = scene->lightDirection.dot(normal);
         Color Id = ldn > 0.0f
-            ? scene->lightColor * sphere->diffuseColor * sphere->kd * ldn
+            ? scene->lightColor * hit->sphere->diffuseColor * hit->sphere->kd * ldn
             : Color(0.0f, 0.0f, 0.0f);
         Color Is = ldn > 0.0f
-            ? scene->lightColor * sphere->specularColor * sphere->ks *
-            powf((normal * 2 * ldn - scene->lightDirection).dot(v), sphere->kGls)
+            ? scene->lightColor * hit->sphere->specularColor * hit->sphere->ks *
+            powf((normal * 2 * ldn - scene->lightDirection).dot(v), hit->sphere->kGls)
             : Color(0.0f, 0.0f, 0.0f);
         return Ia + Id + Is;
     }
