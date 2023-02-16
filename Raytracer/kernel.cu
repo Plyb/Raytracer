@@ -25,13 +25,13 @@ int main()
     // Parameters
     const int imgHeight = 256;
     const int imgWidth = 256;
-    Sphere whiteSphere(Vec3(0.45f, -0.0f, -0.15f), 0.15f, 0.8f, 0.1f, 0.3f,
+    Sphere whiteSphere(Vec3(0.45f, -0.0f, -0.15f), 0.15f, 0.3f, 0.1f, 0.3f, 0.3f,
         Color(1.0f, 1.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 4.0f);
-    Sphere redSphere(Vec3(0.0f, 0.0f, -0.1f), 0.2f, 0.6f, 0.3f, 0.1f,
+    Sphere redSphere(Vec3(0.0f, 0.0f, -0.1f), 0.2f, 0.5f, 0.3f, 0.1f, 0.1f,
         Color(1.0f, 0.0f, 0.0), Color(1.0f, 1.0f, 1.0f), 32.0f);
-    Sphere greenSphere(Vec3(-0.6f, 0.0f, 0.0f), 0.3f, 0.7f, 0.2f, 0.1f,
+    Sphere greenSphere(Vec3(-0.6f, 0.0f, 0.0f), 0.3f, 0.0f, 0.0f, 0.0f, 1.0f,
         Color(0.0f, 1.0f, 0.0f), Color(0.5f, 1.0f, 0.5f), 64.0f);
-    Sphere blueSphere(Vec3(0.0f, -10000.5, 0.0f), 10000.0f, 0.9f, 0.0f, 0.1f,
+    Sphere blueSphere(Vec3(0.0f, -10000.5, 0.0f), 10000.0f, 0.1f, 0.0f, 0.1f, 0.8f,
         Color(0.0f, 0.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 16.0);
 
     /*Sphere purpleSphere(Vec3(0.0f, 0.0f, 0.0f), 0.4f, 0.7f, 0.2f, 0.1f,

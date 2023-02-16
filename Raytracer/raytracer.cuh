@@ -21,9 +21,19 @@ void tracePixel(byte* imgBuffer, int imgHeight, int imgWidth, const Scene* scene
 
     float sy = pixelY / float(imgHeight >> 1) - 1.0f;
     float sx = pixelX / float(imgHeight >> 1) - 1.0f;
-    Ray primaryRay = Ray(Vec3(scene->camPos), (Vec3(sx, sy, 0.0f) - scene->camPos).normalize());
-
-    Color color = primaryRay.getColor(scene, NULL);
+    Ray* ray = new Ray(Vec3(scene->camPos), (Vec3(sx, sy, 0.0f) - scene->camPos).normalize(), 1.0f);
+    const Sphere* excluded = NULL;
+    Color color(0.0f, 0.0f, 0.0f);
+    for (int i = 0; i < 5; i++) {
+        if (ray == NULL) {
+            break;
+        }
+        Ray::RayResult res = ray->getColor(scene, excluded);
+        color = color + res.color;
+        delete ray;
+        ray = res.reflectedRay;
+        excluded = res.sphere;
+    }
 
     imgBuffer[i + 0] = color.byteR();
     imgBuffer[i + 1] = color.byteG();

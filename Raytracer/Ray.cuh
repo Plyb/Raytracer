@@ -4,29 +4,40 @@
 #include "RayHit.cuh"
 class Ray {
 public:
+    class RayResult {
+    public:
+        Color color;
+        Ray* reflectedRay;
+        const Sphere* sphere;
+        __device__ RayResult(Color color, Ray* reflectedRay, const Sphere* sphere) : reflectedRay(reflectedRay), color(color), sphere(sphere) {}
+    };
+    static const int MAX_REFLECTION_DEPTH = 1;
+
 	Vec3 origin;
 	Vec3 dir;
-	__device__ Ray(Vec3 origin, Vec3 dir) : origin(origin), dir(dir) {}
+    float attenuation;
+	__device__ Ray(Vec3 origin, Vec3 dir, float attenuation) :
+        origin(origin), dir(dir), attenuation(attenuation) {}
 
-	__device__ Color getColor(const Scene* scene, const Sphere* excludeSphere) {
+	__device__ RayResult getColor(const Scene* scene, const Sphere* excludeSphere) {
         RayHit hit = getClosestIntersection(scene, excludeSphere);
         if (!hit.hasIntersection()) {
-            return scene->bgColor;
+            return RayResult(scene->bgColor * attenuation, NULL, NULL);
         }
 
-        bool inShadow = Ray(hit.point, scene->lightDirection)
+        bool inShadow = Ray(hit.point, scene->lightDirection, 0.0f)
             .hasIntersection(scene, hit.sphere);
 
-        return phong(scene, &hit, inShadow);
+        return RayResult(phong(scene, &hit, inShadow) * attenuation, reflection(scene, &hit), hit.sphere);// +reflection(scene, &hit);
 	}
 
 private:
     __device__ RayHit getClosestIntersection(const Scene* scene, const Sphere* excludeSphere) {
         RayHit closestHit = RayHit();
         for (int i = 0; i < scene->numSpheres; i++) {
-            const Sphere* sphere = &scene->spheres[i];
+            const Sphere* sphere = scene->spheres + i;
             if (sphere == excludeSphere) {
-                break;
+                continue;
             }
 
             RayHit hit = intersectsSphere(sphere);
@@ -69,13 +80,13 @@ private:
             float t0 = (-b - sqrtf(d)) / 2;
             if (t0 > 0) {
                 Vec3 point = tToVec3(t0);
-                return RayHit(sphere, point, origin.distance(point));
+                return RayHit(sphere, point, origin.distance(point), dir);
             }
             else {
                 float t1 = (-b + sqrtf(d)) / 2;
                 if (t1 > 0) {
                     Vec3 point = tToVec3(t1);
-                    return RayHit(sphere, point, origin.distance(point));
+                    return RayHit(sphere, point, origin.distance(point), dir);
                 }
             }
         }
@@ -83,14 +94,14 @@ private:
     }
 
     __device__
-    Color phong(const Scene* scene, const RayHit* hit, bool inShadow) {
+    Color phong(const Scene* scene, RayHit* hit, bool inShadow) {
         Color Ia = scene->ambientLightColor * hit->sphere->ka;
         if (inShadow) {
             return Ia;
         }
 
         Vec3 v = (origin - hit->point).normalize();
-        Vec3 normal = sphereNormal(hit->point, hit->sphere);
+        Vec3 normal = hit->getNormal();
         float ldn = scene->lightDirection.dot(normal);
         Color Id = ldn > 0.0f
             ? scene->lightColor * hit->sphere->diffuseColor * hit->sphere->kd * ldn
@@ -101,16 +112,15 @@ private:
             : Color(0.0f, 0.0f, 0.0f);
         return Ia + Id + Is;
     }
+
+    __device__
+    Ray* reflection(const Scene* scene, RayHit* hit) {
+        Vec3 reflectedDir = hit->dir - hit->getNormal() * 2 * hit->dir.dot(hit->getNormal());
+        return new Ray(hit->point, reflectedDir, attenuation * hit->sphere->kr); // TODO: delete
+    }
     
     __device__
     Vec3 tToVec3(float t) {
         return origin + (dir * t);
-    }
-    
-    __device__
-    Vec3 sphereNormal(const Vec3 p, const Sphere* sphere) {
-        Vec3 center = sphere->center;
-        float r = sphere->radius;
-        return Vec3((p.x - center.x) / r, (p.y - center.y) / r, (p.z - center.z) / r);
     }
 };
