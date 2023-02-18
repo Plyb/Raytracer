@@ -18,18 +18,19 @@ void checkCuda(cudaError_t result, char const* const func, const char* const fil
     }
 }
 
-void raytrace(byte* imgBuffer, int imgHeight, int imgWidth, Scene* scene);
+void raytrace(byte* imgBuffer, int imgHeight, int imgWidth, int reflectionDepth, Scene* scene);
 
 int main()
 {
     // Parameters
     const int imgHeight = 256;
     const int imgWidth = 256;
+    const int reflectionDepth = 5;
     Sphere whiteSphere(Vec3(0.45f, -0.0f, -0.15f), 0.15f, 0.3f, 0.1f, 0.3f, 0.3f,
         Color(1.0f, 1.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 4.0f);
     Sphere redSphere(Vec3(0.0f, 0.0f, -0.1f), 0.2f, 0.5f, 0.3f, 0.1f, 0.1f,
         Color(1.0f, 0.0f, 0.0), Color(1.0f, 1.0f, 1.0f), 32.0f);
-    Sphere greenSphere(Vec3(-0.6f, 0.0f, 0.0f), 0.3f, 0.0f, 0.0f, 0.0f, 1.0f,
+    Sphere greenSphere(Vec3(-0.6f, 0.0f, 0.0f), 0.3f, 0.05f, 0.025f, 0.025f, 0.9f,
         Color(0.0f, 1.0f, 0.0f), Color(0.5f, 1.0f, 0.5f), 64.0f);
     Sphere blueSphere(Vec3(0.0f, -10000.5, 0.0f), 10000.0f, 0.1f, 0.0f, 0.1f, 0.8f,
         Color(0.0f, 0.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 16.0);
@@ -65,7 +66,7 @@ int main()
 
     byte* imgBuffer = new byte[imgHeight * imgWidth * 3];
 
-    raytrace(imgBuffer, imgHeight, imgWidth, &scene);
+    raytrace(imgBuffer, imgHeight, imgWidth, reflectionDepth, &scene);
 
     PpmWriter writer("./out.ppm");
     writer.write(imgBuffer, imgHeight, imgWidth, true);
@@ -75,7 +76,7 @@ int main()
 }
 
 // Helper function for using CUDA to add vectors in parallel.
-void raytrace(byte* imgBuffer, int imgHeight, int imgWidth, Scene* scene)
+void raytrace(byte* imgBuffer, int imgHeight, int imgWidth, int reflectionDepth, Scene* scene)
 {
     byte* devImgBuffer = 0;
     size_t imgBufferSize = imgHeight * imgWidth * 3 * sizeof(byte);
@@ -97,7 +98,7 @@ void raytrace(byte* imgBuffer, int imgHeight, int imgWidth, Scene* scene)
     // Launch a kernel on the GPU with one thread for each pixel.
     const int MAX_THREADS_PER_BLOCK = 1024;
     int numBlocks = (imgHeight * imgWidth / MAX_THREADS_PER_BLOCK) + 1;
-    tracePixel<<<numBlocks, MAX_THREADS_PER_BLOCK>>>(devImgBuffer, imgHeight, imgWidth, devScene);
+    tracePixel<<<numBlocks, MAX_THREADS_PER_BLOCK>>>(devImgBuffer, imgHeight, imgWidth, reflectionDepth, devScene);
 
     // Check for any errors launching the kernel
     checkCudaErrors(cudaGetLastError());

@@ -9,7 +9,7 @@
 using namespace std;
 
 inline __global__
-void tracePixel(byte* imgBuffer, int imgHeight, int imgWidth, const Scene* scene) {
+void tracePixel(byte* imgBuffer, int imgHeight, int imgWidth, int reflectionDepth, const Scene* scene) {
     int pixelIndex = blockDim.x * blockIdx.x + threadIdx.x;
     int pixelX = pixelIndex % imgWidth;
     int pixelY = (imgHeight - pixelIndex / imgWidth - 1);
@@ -24,7 +24,7 @@ void tracePixel(byte* imgBuffer, int imgHeight, int imgWidth, const Scene* scene
     Ray* ray = new Ray(Vec3(scene->camPos), (Vec3(sx, sy, 0.0f) - scene->camPos).normalize(), 1.0f);
     const Sphere* excluded = NULL;
     Color color(0.0f, 0.0f, 0.0f);
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < reflectionDepth + 1; i++) {
         if (ray == NULL) {
             break;
         }

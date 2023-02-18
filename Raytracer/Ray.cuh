@@ -11,7 +11,6 @@ public:
         const Sphere* sphere;
         __device__ RayResult(Color color, Ray* reflectedRay, const Sphere* sphere) : reflectedRay(reflectedRay), color(color), sphere(sphere) {}
     };
-    static const int MAX_REFLECTION_DEPTH = 1;
 
 	Vec3 origin;
 	Vec3 dir;
@@ -28,7 +27,7 @@ public:
         bool inShadow = Ray(hit.point, scene->lightDirection, 0.0f)
             .hasIntersection(scene, hit.sphere);
 
-        return RayResult(phong(scene, &hit, inShadow) * attenuation, reflection(scene, &hit), hit.sphere);// +reflection(scene, &hit);
+        return RayResult(phong(scene, &hit, inShadow) * attenuation, reflection(scene, &hit), hit.sphere);
 	}
 
 private:
@@ -116,7 +115,7 @@ private:
     __device__
     Ray* reflection(const Scene* scene, RayHit* hit) {
         Vec3 reflectedDir = hit->dir - hit->getNormal() * 2 * hit->dir.dot(hit->getNormal());
-        return new Ray(hit->point, reflectedDir, attenuation * hit->sphere->kr); // TODO: delete
+        return new Ray(hit->point, reflectedDir, attenuation * hit->sphere->kr);
     }
     
     __device__
