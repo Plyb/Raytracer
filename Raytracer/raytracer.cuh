@@ -21,6 +21,7 @@ void tracePixel(byte* imgBuffer, int imgHeight, int imgWidth, int reflectionDept
 
     float sy = pixelY / float(imgHeight >> 1) - 1.0f;
     float sx = pixelX / float(imgHeight >> 1) - 1.0f;
+
     Ray* ray = new Ray(Vec3(scene->camPos), (Vec3(sx, sy, 0.0f) - scene->camPos).normalize(), 1.0f);
     const Sphere* excluded = NULL;
     Color color(0.0f, 0.0f, 0.0f);

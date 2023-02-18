@@ -94,7 +94,8 @@ private:
 
     __device__
     Color phong(const Scene* scene, RayHit* hit, bool inShadow) {
-        Color Ia = scene->ambientLightColor * hit->sphere->ka;
+        const Material* material = &hit->sphere->material;
+        Color Ia = scene->ambientLightColor * material->ka;
         if (inShadow) {
             return Ia;
         }
@@ -103,11 +104,11 @@ private:
         Vec3 normal = hit->getNormal();
         float ldn = scene->lightDirection.dot(normal);
         Color Id = ldn > 0.0f
-            ? scene->lightColor * hit->sphere->diffuseColor * hit->sphere->kd * ldn
+            ? scene->lightColor * material->diffuseColor * material->kd * ldn
             : Color(0.0f, 0.0f, 0.0f);
         Color Is = ldn > 0.0f
-            ? scene->lightColor * hit->sphere->specularColor * hit->sphere->ks *
-            powf((normal * 2 * ldn - scene->lightDirection).dot(v), hit->sphere->kGls)
+            ? scene->lightColor * material->specularColor * material->ks *
+            powf((normal * 2 * ldn - scene->lightDirection).dot(v), material->kGls)
             : Color(0.0f, 0.0f, 0.0f);
         return Ia + Id + Is;
     }
@@ -115,7 +116,7 @@ private:
     __device__
     Ray* reflection(const Scene* scene, RayHit* hit) {
         Vec3 reflectedDir = hit->dir - hit->getNormal() * 2 * hit->dir.dot(hit->getNormal());
-        return new Ray(hit->point, reflectedDir, attenuation * hit->sphere->kr);
+        return new Ray(hit->point, reflectedDir, attenuation * hit->sphere->material.kr);
     }
     
     __device__
