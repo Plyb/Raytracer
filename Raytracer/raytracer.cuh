@@ -15,7 +15,7 @@ void createScene(const Scene** scene) {
         return;
     }
 
-    Sphere* whiteSphere = new Sphere(Vec3(0.45f, -0.0f, -0.15f), 0.15f, 0.3f, 0.1f, 0.3f, 0.3f,
+    /*Sphere* whiteSphere = new Sphere(Vec3(0.45f, -0.0f, -0.15f), 0.15f, 0.3f, 0.1f, 0.3f, 0.3f,
         Color(1.0f, 1.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 4.0f);
     Sphere* redSphere = new Sphere(Vec3(0.0f, 0.0f, -0.1f), 0.2f, 0.5f, 0.3f, 0.1f, 0.1f,
         Color(1.0f, 0.0f, 0.0), Color(1.0f, 1.0f, 1.0f), 32.0f);
@@ -24,7 +24,7 @@ void createScene(const Scene** scene) {
     Sphere* blueSphere = new Sphere(Vec3(0.0f, -10000.5, 0.0f), 10000.0f, 0.1f, 0.0f, 0.1f, 0.8f,
         Color(0.0f, 0.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 16.0);
     Triangle* triangle = new Triangle(Vec3(-0.5f, 0.0f, -0.5f), Vec3(0.5f, 0.0f, 0.0f), Vec3(0.0f, 0.5f, -0.2f),
-        7.0f, 0.0f, 1.0f, 2.0f, Color(1.0f, 0.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 16.0f);
+        7.0f, 0.0f, 1.0f, 2.0f, Color(1.0f, 0.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 16.0f);*/
 
     /*Sphere purpleSphere(Vec3(0.0f, 0.0f, 0.0f), 0.4f, 0.7f, 0.2f, 0.1f,
         Color(1.0f, 0.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 16.0f);*/
@@ -46,17 +46,62 @@ void createScene(const Scene** scene) {
         Sphere nose(Vec3(0.0f, 0.35f, 0.3f), 0.03f, 0.7f, 0.2f, 0.1f,
             Color(1.0f, 0.5f, 0.0f), Color(1.0f, 1.0f, 1.0f), 16.0f);*/
 
-    const int numHittables = 5;
+    /*Sphere* reflectiveSphere = new Sphere(Vec3(0.0, 0.3f, -1.0f), 0.25f, 0.0f, 0.1f, 0.1f, 0.9f,
+        Color(0.75f, 0.75f, 0.75f), Color(1.0f, 1.0f, 1.0f), 10.0f);
+    Triangle* blueTriangle = new Triangle(Vec3(0.0f, -0.7f, 0.5f), Vec3(1.0f, 0.4f, -1.0f), Vec3(0.0f, -0.7f, -1.5f),
+        0.9f, 1.0f, 0.1f, 0.0f, Color(0.0f, 0.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 4.0f);
+    Triangle* yellowTriangle = new Triangle(Vec3(0.0f, -0.7f, 0.5f), Vec3(0.0f, -0.7f, -1.5f), Vec3(-1.0f, 0.4f, -1.0f),
+        0.9f, 1.0f, 0.1f, 0.0f, Color(1.0f, 1.0f, 0.0f), Color(1.0f, 1.0f, 1.0f), 4.0f);*/
+
+    /*Sphere* whiteSphere = new Sphere(Vec3(0.5, 0.0f, -0.15f), 0.05f, 0.5f, 0.1f, 0.3f, 0.0f,
+        Color(1.0f, 1.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 4.0f);
+    Sphere* redSphere = new Sphere(Vec3(0.3f, 0.0f, -0.1f), 0.08f, 0.8f, 0.8f, 0.1f, 0.0f,
+        Color(1.0f, 0.0f, 0.0f), Color(0.5f, 1.0f, 0.5f), 32.0f);
+    Sphere* greenSphere = new Sphere(Vec3(-0.6f, 0.0f, 0.0f), 0.3f, 0.7f, 0.5f, 0.1f, 0.0f,
+        Color(0.0f, 1.0f, 0.0f), Color(0.5f, 1.0f, 0.5f), 64.0f);
+    Sphere* reflectiveSphere = new Sphere(Vec3(0.1f, -0.55f, 0.25f), 0.3f, 0.0f, 0.1f, 0.1f, 0.9f,
+        Color(0.75f, 0.75f, 0.75f), Color(1.0f, 1.0f, 1.0f), 10.0f);
+    Triangle* blueTriangle = new Triangle(Vec3(0.3f, -0.3f, -0.4f), Vec3(0.0f, 0.3f, -0.1f), Vec3(-0.3f, -0.3f, 0.2f),
+        0.9f, 0.9f, 0.1f, 0.0f, Color(0.0f, 0.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 32.0f);
+    Triangle* yellowTriangle = new Triangle(Vec3(-0.2f, 0.1f, 0.1f), Vec3(-0.2f, -0.5f, 0.2f), Vec3(-0.2f, 0.1f, -0.3f),
+        0.9f, 0.5f, 0.1f, 0.0f, Color(1.0f, 1.0f, 0.0f), Color(1.0f, 1.0f, 1.0f), 4.0f);*/
+
+    Triangle* frontTop = new Triangle(Vec3(0.0f, -0.005f, 0.0f), Vec3(0.25f, 0.25f, -0.25f), Vec3(-0.25f, 0.25f, -0.25f),
+        0.2f, 0.1f, 0.1f, 0.9f, Color(1.0f, 1.0f, 0.1f), Color(1.0f, 1.0f, 0.9f), 64.0f);
+    Triangle* frontLeft = new Triangle(Vec3(0.005f, 0.0f, 0.0f), Vec3(-0.25f, 0.25f, -0.25f), Vec3(-0.25f, -0.25f, -0.25f),
+        0.2f, 0.1f, 0.1f, 0.9f, Color(1.0f, 1.0f, 0.1f), Color(1.0f, 1.0f, 0.9f), 64.0f);
+    Triangle* frontBottom = new Triangle(Vec3(0.0f, 0.005f, 0.0f), Vec3(-0.25f, -0.25f, -0.25f), Vec3(0.25f, -0.25f, -0.25f),
+        0.2f, 0.1f, 0.1f, 0.9f, Color(1.0f, 1.0f, 0.1f), Color(1.0f, 1.0f, 0.9f), 64.0f);
+    Triangle* frontRight = new Triangle(Vec3(-0.005f, 0.0f, 0.0f), Vec3(0.25f, -0.25f, -0.25f), Vec3(0.25f, 0.25f, -0.25f),
+        0.2f, 0.1f, 0.1f, 0.9f, Color(1.0f, 1.0f, 0.1f), Color(1.0f, 1.0f, 0.9f), 64.0f);
+    Triangle* backTop = new Triangle(Vec3(0.0f, 0.0f, -1.0f), Vec3(0.5f, 0.5f, -0.5f), Vec3(-0.5f, 0.5f, -0.5f),
+        0.0f, 0.1f, 0.1f, 0.9f, Color(0.0f, 0.0f, 0.0f), Color(1.0f, 1.0f, 0.9f), 64.0f);
+    Triangle* backLeft = new Triangle(Vec3(0.0f, 0.0f, -1.0f), Vec3(-0.5f, 0.5f, -0.5f), Vec3(-0.5f, -0.5f, -0.5f),
+        0.0f, 0.1f, 0.1f, 0.9f, Color(0.0f, 0.0f, 0.0f), Color(1.0f, 1.0f, 0.9f), 64.0f);
+    Triangle* backBottom = new Triangle(Vec3(0.0f, 0.0f, -1.0f), Vec3(-0.5f, -0.5f, -0.5f), Vec3(0.5f, -0.5f, -0.5f),
+        0.0f, 0.1f, 0.1f, 0.9f, Color(0.0f, 0.0f, 0.0f), Color(1.0f, 1.0f, 0.9f), 64.0f);
+    Triangle* backRight = new Triangle(Vec3(0.0f, 0.0f, -1.0f), Vec3(0.5f, -0.5f, -0.5f), Vec3(0.5f, 0.5f, -0.5f),
+        0.0f, 0.1f, 0.1f, 0.9f, Color(0.0f, 0.0f, 0.0f), Color(1.0f, 1.0f, 0.9f), 64.0f);
+    Sphere* sphere = new Sphere(Vec3(0.0f, 0.0f, -0.5f), 0.1f, 0.9, 0.4f, 0.1f, 0.7f,
+        Color(1.0f, 0.0f, 0.0f), Color(0.0f, 1.0f, 1.0f), 16.0f);
+
+
+    const int numHittables = 9;
     const Hittable** hittables = new const Hittable*[numHittables]{ 
-        whiteSphere, redSphere, greenSphere, blueSphere, triangle
+        frontTop, frontLeft, frontBottom, frontRight, backTop, backLeft, backBottom, backRight, sphere,
     };
     /*Scene scene(spheres, numSpheres, Vec3(0.0f, 0.0f, 1.0f), Vec3(0.0f, 1.0f, 0.0f),
         Color(1.0f, 1.0f, 1.0f), Color(0.0f, 0.0f, 0.0f), Color(0.2f, 0.2f, 0.2f));*/
-    *(scene) = new Scene(hittables, numHittables, Vec3(0.0f, 0.0f, 1.0f), Vec3(1.0f, 1.0f, 1.0f),
-        Color(1.0f, 1.0f, 1.0f), Color(0.1f, 0.1f, 0.1f), Color(0.2f, 0.2f, 0.2f));
+    /**(scene) = new Scene(hittables, numHittables, Vec3(0.0f, 0.0f, 1.0f), Vec3(1.0f, 1.0f, 1.0f),
+        Color(1.0f, 1.0f, 1.0f), Color(0.1f, 0.1f, 0.1f), Color(0.2f, 0.2f, 0.2f));*/
     /*Scene scene(spheres, numSpheres, Vec3(0.0f, 0.0f, 1.0f), Vec3(1.0f, 3.0f, 1.0f),
             Color(1.0f, 1.0f, 1.0f), Color(0.7f, 0.7f, 0.9f), Color(0.5f, 0.5f, 0.8f));*/
-
+    /**scene = new Scene(hittables, numHittables, Vec3(0.0f, 0.0f, 1.0f), Vec3(0.0f, 1.0f, 0.0f),
+        Color(1.0f, 1.0f, 1.0f), Color(0.0f, 0.0f, 0.0f), Color(0.2f, 0.2f, 0.2f));*/
+    /**scene = new Scene(hittables, numHittables, Vec3(0.0f, 0.0f, 1.0f), Vec3(1.0f, 0.0f, 0.0f),
+        Color(1.0f, 1.0f, 1.0f), Color(0.1f, 0.1f, 0.1f), Color(0.2f, 0.2f, 0.2f));*/
+    *scene = new Scene(hittables, numHittables, Vec3(0.0f, 0.0f, 1.0f), Vec3(0.0f, 0.8f, 1.0f),
+        Color(1.0f, 1.0f, 1.0f), Color(0.1f, 0.1f, 0.1f), Color(0.2f, 0.2f, 0.2f));
 }
 
 inline __global__

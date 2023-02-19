@@ -24,10 +24,10 @@ void raytrace(byte* imgBuffer, int imgHeight, int imgWidth, int reflectionDepth)
 int main()
 {
     // Parameters
-    const int imgHeight = 256;
-    const int imgWidth = 256;
-    const int reflectionDepth = 5;
-    const bool p6 = false;
+    const int imgHeight = 4096;
+    const int imgWidth = 4096;
+    const int reflectionDepth = 10;
+    const bool p6 = true;
 
     byte* imgBuffer = new byte[imgHeight * imgWidth * 3];
 

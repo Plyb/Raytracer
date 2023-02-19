@@ -28,7 +28,17 @@ public:
 		return Color(r * o.r, g * o.g, b * o.b);
 	}
 	__device__ Color operator+(Color o) const {
-		return Color(r + o.r, g + o.g, b + o.b);
+		Color res = Color(r + o.r, g + o.g, b + o.b);
+		if (res.r > 1.0f) {
+			res.r = 1.0f;
+		}
+		if (res.g > 1.0f) {
+			res.g = 1.0f;
+		}
+		if (res.b > 1.0f) {
+			res.b = 1.0f;
+		}
+		return res;
 	}
 };
 
