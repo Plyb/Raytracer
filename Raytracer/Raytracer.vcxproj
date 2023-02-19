@@ -96,7 +96,6 @@
     <ClInclude Include="Vec3.cuh" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Color.cpp" />
     <ClCompile Include="PpmWriter.cpp" />
   </ItemGroup>
   <ItemGroup>
