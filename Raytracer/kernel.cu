@@ -27,7 +27,7 @@ int main()
     const int imgHeight = 256;
     const int imgWidth = 256;
     const int reflectionDepth = 5;
-    const bool p6 = true;
+    const bool p6 = false;
 
     byte* imgBuffer = new byte[imgHeight * imgWidth * 3];
 

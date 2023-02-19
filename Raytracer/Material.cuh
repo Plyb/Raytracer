@@ -22,7 +22,6 @@ public:
             return Ia;
         }
 
-        //Vec3 v = (origin - hit->point).normalize();
         float ldn = lightDirection.dot(normal);
         Color Id = ldn > 0.0f
             ? lightColor * diffuseColor * kd * ldn

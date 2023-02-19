@@ -36,8 +36,20 @@ public:
 		return Vec3(x * o, y * o, z * o);
 	}
 
+	__device__ Vec3 operator-() const {
+		return Vec3(-x, -y, -z);
+	}
+
 	__device__ float dot(Vec3 o) const {
 		return x * o.x + y * o.y + z * o.z;
+	}
+
+	__device__ Vec3 cross(Vec3 o) const {
+		return Vec3(
+			y * o.z - z * o.y,
+			z * o.x - x * o.z,
+			x * o.y - y * o.x
+		);
 	}
 
 	__device__ Color toColor() const {

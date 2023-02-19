@@ -93,6 +93,7 @@
     <ClInclude Include="Ray.cuh" />
     <ClInclude Include="Scene.cuh" />
     <ClInclude Include="Sphere.cuh" />
+    <ClInclude Include="Triangle.cuh" />
     <ClInclude Include="Vec3.cuh" />
   </ItemGroup>
   <ItemGroup>

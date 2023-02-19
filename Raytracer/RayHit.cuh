@@ -15,6 +15,12 @@ public:
 		material(Material(ka, kd, ks, kr, diffuseColor, specularColor, kGls)) {}
 
 	__device__ Hittable() {}
+
+protected:
+	__device__
+		Vec3 tToVec3(Vec3 origin, Vec3 dir, float t) const {
+		return origin + (dir * t);
+	}
 };
 
 class RayHit {

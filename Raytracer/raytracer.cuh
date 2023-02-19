@@ -6,6 +6,7 @@
 #include "Scene.cuh"
 #include "Ray.cuh"
 #include "Sphere.cuh"
+#include "Triangle.cuh"
 using namespace std;
 
 inline __global__
@@ -22,6 +23,8 @@ void createScene(const Scene** scene) {
         Color(0.0f, 1.0f, 0.0f), Color(0.5f, 1.0f, 0.5f), 64.0f);
     Sphere* blueSphere = new Sphere(Vec3(0.0f, -10000.5, 0.0f), 10000.0f, 0.1f, 0.0f, 0.1f, 0.8f,
         Color(0.0f, 0.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 16.0);
+    Triangle* triangle = new Triangle(Vec3(-0.5f, 0.0f, -0.5f), Vec3(0.5f, 0.0f, 0.0f), Vec3(0.0f, 0.5f, -0.2f),
+        7.0f, 0.0f, 1.0f, 2.0f, Color(1.0f, 0.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 16.0f);
 
     /*Sphere purpleSphere(Vec3(0.0f, 0.0f, 0.0f), 0.4f, 0.7f, 0.2f, 0.1f,
         Color(1.0f, 0.0f, 1.0f), Color(1.0f, 1.0f, 1.0f), 16.0f);*/
@@ -43,8 +46,10 @@ void createScene(const Scene** scene) {
         Sphere nose(Vec3(0.0f, 0.35f, 0.3f), 0.03f, 0.7f, 0.2f, 0.1f,
             Color(1.0f, 0.5f, 0.0f), Color(1.0f, 1.0f, 1.0f), 16.0f);*/
 
-    int numHittables = 4;
-    const Hittable** hittables = new const Hittable*[numHittables]{ whiteSphere, redSphere, greenSphere, blueSphere };
+    const int numHittables = 5;
+    const Hittable** hittables = new const Hittable*[numHittables]{ 
+        whiteSphere, redSphere, greenSphere, blueSphere, triangle
+    };
     /*Scene scene(spheres, numSpheres, Vec3(0.0f, 0.0f, 1.0f), Vec3(0.0f, 1.0f, 0.0f),
         Color(1.0f, 1.0f, 1.0f), Color(0.0f, 0.0f, 0.0f), Color(0.2f, 0.2f, 0.2f));*/
     *(scene) = new Scene(hittables, numHittables, Vec3(0.0f, 0.0f, 1.0f), Vec3(1.0f, 1.0f, 1.0f),

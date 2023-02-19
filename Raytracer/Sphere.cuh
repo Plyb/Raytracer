@@ -38,15 +38,9 @@ public:
         return RayHit();
 	}
 
-    __device__ Vec3 getNormal(Vec3 point) const override { // TODO: avoid recomputation with this
+    __device__ Vec3 getNormal(Vec3 point) const override {
         float r = radius;
         Vec3 p = point;
         return Vec3((p.x - center.x) / r, (p.y - center.y) / r, (p.z - center.z) / r);
-    }
-
-private:
-    __device__
-        Vec3 tToVec3(Vec3 origin, Vec3 dir, float t) const {
-        return origin + (dir * t);
     }
 };
