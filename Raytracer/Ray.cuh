@@ -27,7 +27,12 @@ public:
         bool inShadow = Ray(hit.point, scene->lightDirection, 0.0f)
             .hasIntersection(scene, hit.hittable);
 
-        return RayResult(phong(scene, &hit, inShadow) * attenuation, reflection(scene, &hit), hit.hittable);
+        return RayResult(
+            hit.hittable->material.phong(inShadow, hit.dir, hit.getNormal(), scene->lightDirection,
+                scene->lightColor, scene->ambientLightColor) * attenuation,
+            reflection(scene, &hit),
+            hit.hittable
+        );
 	}
 
 private:
@@ -62,27 +67,6 @@ private:
             }
         }
         return false;
-    }
-
-    __device__
-    Color phong(const Scene* scene, RayHit* hit, bool inShadow) {
-        const Material* material = &hit->hittable->material;
-        Color Ia = scene->ambientLightColor * material->ka;
-        if (inShadow) {
-            return Ia;
-        }
-
-        Vec3 v = (origin - hit->point).normalize();
-        Vec3 normal = hit->getNormal();
-        float ldn = scene->lightDirection.dot(normal);
-        Color Id = ldn > 0.0f
-            ? scene->lightColor * material->diffuseColor * material->kd * ldn
-            : Color(0.0f, 0.0f, 0.0f);
-        Color Is = ldn > 0.0f
-            ? scene->lightColor * material->specularColor * material->ks *
-            powf((normal * 2 * ldn - scene->lightDirection).dot(v), material->kGls)
-            : Color(0.0f, 0.0f, 0.0f);
-        return Ia + Id + Is;
     }
 
     __device__
